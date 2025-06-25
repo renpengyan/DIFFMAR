@@ -60,14 +60,16 @@ def train():
             
             sie_fmaps = sie(xLI)
             x0_refined = generator(x_t_minus_1, Lt_adjusted, sie_fmaps[1])  # 推荐用第2层特征
+            
+            
+            
+            x0_resized_1 = torch.nn.functional.interpolate(x0, size=x0_hat.shape[2:], mode='bilinear', align_corners=False)
+            mask_resized_1 = torch.nn.functional.interpolate(mask.float(), size=x0_hat.shape[2:], mode='nearest')
+            x0_resized_2 = torch.nn.functional.interpolate(x0, size=x0_refined.shape[2:], mode='bilinear', align_corners=False)
+            mask_resized_2 = torch.nn.functional.interpolate(mask.float(), size=x0_refined.shape[2:], mode='nearest')
+            loss1 = masked_l1_loss(x0_hat, x0_resized_1, mask_resized_1)
+            loss2 = masked_l1_loss(x0_refined, x0_resized_2, mask_resized_2)
 
-
-            # 损失计算
-            x0_resized = torch.nn.functional.interpolate(x0, size=x0_hat.shape[2:], mode='bilinear', align_corners=False)
-            mask_resized = torch.nn.functional.interpolate(mask.float(), size=x0_hat.shape[2:], mode='nearest')
-            loss1 = masked_l1_loss(x0_hat, x0_resized, mask_resized)
-
-            loss2 = masked_l1_loss(x0_refined, x0_resized, mask_resized)
 
             loss = loss1 + loss2
 
