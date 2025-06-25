@@ -9,7 +9,7 @@ def get_config():
     # 超参数
     config.batch_size = 1
     config.lr = 2e-5
-    config.epochs = 300
+    config.epochs = 30
     config.T = 10  # diffusion steps
     config.latent_dim = 128
 
