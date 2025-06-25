@@ -50,7 +50,7 @@ def main(xT_dir, mask_dir, out_dir):
     for fname in tqdm(files):
         xT = cv2.imread(os.path.join(xT_dir, fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
         mask = cv2.imread(os.path.join(mask_dir, fname), cv2.IMREAD_GRAYSCALE)
-        mask = (mask > 127).astype(np.uint8)
+        mask = (mask = 127).astype(np.uint8)
 
         xLI = linear_interpolate(xT, mask)
         xLI_uint8 = (xLI * 255).astype(np.uint8)
