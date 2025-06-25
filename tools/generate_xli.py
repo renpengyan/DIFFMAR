@@ -45,19 +45,21 @@ def linear_interpolate(xT, mask):
 
 def main(xT_dir, mask_dir, out_dir):
     os.makedirs(out_dir, exist_ok=True)
-    files = sorted(os.listdir(xT_dir))
+    xT_files = sorted(os.listdir(xT_dir))
+    mask_files = sorted(os.listdir(mask_dir))
 
-    for fname in tqdm(files):
+    for fname in tqdm(mask_files):
+        if fname not in xT_files:
+            print(f"Skipping {fname}: No corresponding xT image.")
+            continue
+
         xT = cv2.imread(os.path.join(xT_dir, fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
         mask = cv2.imread(os.path.join(mask_dir, fname), cv2.IMREAD_GRAYSCALE)
-        mask = (mask = 127).astype(np.uint8)
+        mask = (mask > 127).astype(np.uint8)
 
         xLI = linear_interpolate(xT, mask)
         xLI_uint8 = (xLI * 255).astype(np.uint8)
         cv2.imwrite(os.path.join(out_dir, fname), xLI_uint8)
 
 if __name__ == '__main__':
-    xT_dir = 'data/train/xT'
-    mask_dir = 'data/train/mask'
-    out_dir = 'data/train/xLI'
-    main(xT_dir, mask_dir, out_dir)
+    xT_dir = 'data/train/xT'  # `xT` 文件夹
