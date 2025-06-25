@@ -72,7 +72,7 @@ def train():
             pbar.set_postfix(loss=loss.item())
 
         # 保存模型
-        torch.save(generator.state_dict(), f'checkpoints/generator_epoch{epoch+1}.pt')
+torch.save(generator.state_dict(), f'checkpoints/generator_epoch{epoch+1}.pt')
 
 
 if __name__ == '__main__':
