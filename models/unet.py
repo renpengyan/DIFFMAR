@@ -48,6 +48,8 @@ class UNetBlock(nn.Module):
             nn.ReLU(),
             ResBlock(out_ch)
         )
+        self.sie_adapter = nn.Conv2d(128, 64, kernel_size=1)  # 适配 SIE 特征通道
+
 
     def forward(self, x):
         return self.encode(x)
@@ -96,6 +98,7 @@ class GeneratorUNet(nn.Module):
         u1 = self.up1(u2, d1)
 
         if sie_features is not None:
+            sie_features = self.sie_adapter(sie_features)  # 通道匹配到 u1
             u1 += sie_features  # 融合来自SIE的引导特征
 
         out = self.final(u1)
