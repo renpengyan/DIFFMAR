@@ -63,8 +63,12 @@ def train():
 
 
             # 损失计算
-            loss1 = masked_l1_loss(x0_hat, x0, mask)
-            loss2 = masked_l1_loss(x0_refined, x0, mask)
+            x0_resized = torch.nn.functional.interpolate(x0, size=x0_hat.shape[2:], mode='bilinear', align_corners=False)
+            mask_resized = torch.nn.functional.interpolate(mask.float(), size=x0_hat.shape[2:], mode='nearest')
+            loss1 = masked_l1_loss(x0_hat, x0_resized, mask_resized)
+
+            loss2 = masked_l1_loss(x0_refined, x0_resized, mask_resized)
+
             loss = loss1 + loss2
 
             optimizer.zero_grad()
