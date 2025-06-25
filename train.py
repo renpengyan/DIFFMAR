@@ -57,8 +57,10 @@ def train():
 
             Lt_minus_1 = time_embed(t - 1)
             Lt_adjusted = tla(Lt_minus_1, x_t_minus_1, x0_hat, xT)
+            
+            sie_fmaps = sie(xLI)
+            x0_refined = generator(x_t_minus_1, Lt_adjusted, sie_fmaps[1])  # 推荐用第2层特征
 
-            x0_refined = generator(x_t_minus_1, Lt_adjusted, sie(xLI)[0])
 
             # 损失计算
             loss1 = masked_l1_loss(x0_hat, x0, mask)
