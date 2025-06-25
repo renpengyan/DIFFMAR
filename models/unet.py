@@ -48,7 +48,7 @@ class UNetBlock(nn.Module):
             nn.ReLU(),
             ResBlock(out_ch)
         )
-        self.sie_adapter = nn.Conv2d(128, 64, kernel_size=1)  # 适配 SIE 特征通道
+       
 
 
     def forward(self, x):
@@ -84,6 +84,7 @@ class GeneratorUNet(nn.Module):
         self.up1 = UNetUpBlock(base_channels * 2, base_channels)
 
         self.final = nn.Conv2d(base_channels, 1, 1)
+        self.sie_adapter = nn.Conv2d(128, 64, kernel_size=1)  # 适配 SIE 特征通道
 
     def forward(self, x, time_embedding, sie_features=None):
         d1 = self.down1(x)
