@@ -21,16 +21,16 @@ def inject_metal_artifact(x0, mask, artifact_intensity=1.5):
 
 def main(x0_dir, mask_dir, out_dir):
     os.makedirs(out_dir, exist_ok=True)
-    x0_files = sorted(os.listdir(x0_dir))
     mask_files = sorted(os.listdir(mask_dir))
+    x0_files = sorted(os.listdir(x0_dir))
 
-    for fname in tqdm(x0_files):
-        # 随机从 mask 文件夹选择一个图像
-        mask_fname = random.choice(mask_files)
+    for fname in tqdm(mask_files):
+        # 随机从 x0 文件夹选择一个图像
+        x0_fname = random.choice(x0_files)
 
-        # 读取 x0 和 mask 图像
-        x0 = cv2.imread(os.path.join(x0_dir, fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
-        mask = cv2.imread(os.path.join(mask_dir, mask_fname), cv2.IMREAD_GRAYSCALE)
+        # 读取图像和 mask
+        x0 = cv2.imread(os.path.join(x0_dir, x0_fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
+        mask = cv2.imread(os.path.join(mask_dir, fname), cv2.IMREAD_GRAYSCALE)
         mask = (mask > 127).astype(np.uint8)  # 将 mask 转为二值
 
         # 合成带伪影的图像
@@ -45,3 +45,4 @@ if __name__ == '__main__':
     mask_dir = 'data/train/mask'  # `mask` 文件夹路径
     out_dir = 'data/train/xT'  # 输出的 `xT` 文件夹路径
     main(x0_dir, mask_dir, out_dir)
+
