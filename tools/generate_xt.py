@@ -24,7 +24,7 @@ def main(x0_dir, mask_dir, out_dir):
     for fname in tqdm(files):
         x0 = cv2.imread(os.path.join(x0_dir, fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
         mask = cv2.imread(os.path.join(mask_dir, fname), cv2.IMREAD_GRAYSCALE)
-        mask = (mask > 127).astype(np.uint8)
+        mask = (mask = 127).astype(np.uint8)
 
         xT = inject_metal_artifact(x0, mask, artifact_intensity=1.8)
         xT_uint8 = (xT * 255).astype(np.uint8)
