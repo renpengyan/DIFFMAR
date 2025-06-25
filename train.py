@@ -35,7 +35,7 @@ def train():
                      list(time_embed.parameters()), lr=cfg.lr)
 
     for epoch in range(cfg.epochs):
-        pbar = tqdm(loader, desc=f\"Epoch {epoch+1}/{cfg.epochs}\")
+       pbar = tqdm(loader, desc=f"Epoch {epoch+1}/{cfg.epochs}")
         for batch in pbar:
             x0 = batch['x0'].to(device)
             xT = batch['xT'].to(device)
