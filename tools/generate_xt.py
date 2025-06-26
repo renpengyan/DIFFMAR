@@ -43,8 +43,7 @@ def main(x0_dir, mask_dir, out_dir):
         print(f"[✔] Saved xT image: {out_path}")
 
 if __name__ == '__main__':
-    # 示例：可手动执行测试用
-    main('data/train/x0', 'data/train/mask', 'data/train/xT')
+    
 
       
       
