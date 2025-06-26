@@ -68,7 +68,7 @@ def main(xT_dir, mask_dir, out_dir):
         print(f"[✔] Saved xLI image: {out_path}")
 
 if __name__ == '__main__':
-    main('data/train/xT', 'data/train/mask', 'data/train/xLI')
+
 
 
 
