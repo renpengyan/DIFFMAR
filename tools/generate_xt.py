@@ -26,12 +26,26 @@ def main(x0_dir, mask_dir, out_dir):
 
     for fname in tqdm(x0_files):
         # 随机从 mask 文件夹选择一个图像
+              # 随机从 mask 文件夹选择一个图像
         mask_fname = random.choice(mask_files)
 
-        # 读取 x0 和 mask 图像
-        x0 = cv2.imread(os.path.join(x0_dir, fname), cv2.IMREAD_GRAYSCALE).astype(np.float32) / 255.0
-        mask = cv2.imread(os.path.join(mask_dir, mask_fname), cv2.IMREAD_GRAYSCALE)
-        mask = (mask > 127).astype(np.uint8)  # 将 mask 转为二值
+        # 构建路径
+        x0_path = os.path.join(x0_dir, fname)
+        mask_path = os.path.join(mask_dir, mask_fname)
+
+        # 👇 调试读取
+        x0 = cv2.imread(x0_path, cv2.IMREAD_GRAYSCALE)
+        mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+
+        if x0 is None:
+            print(f"[ERROR] Failed to read x0 image: {x0_path}")
+            continue
+        if mask is None:
+            print(f"[ERROR] Failed to read mask image: {mask_path}")
+            continue
+
+        x0 = x0.astype(np.float32) / 255.0
+        mask = (mask > 127).astype(np.uint8)
 
         # 合成带伪影的图像
         xT = inject_metal_artifact(x0, mask, artifact_intensity=1.8)
@@ -39,5 +53,8 @@ def main(x0_dir, mask_dir, out_dir):
 
         # 保存生成的 xT 图像
         cv2.imwrite(os.path.join(out_dir, fname), xT_uint8)
+
+      
+      
 
 
