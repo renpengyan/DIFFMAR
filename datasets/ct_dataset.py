@@ -7,6 +7,8 @@ import torchvision.transforms as transforms
 
 def load_gray(path):
     img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise FileNotFoundError(f"Cannot load image: {path}")
     return img.astype('float32') / 255.0
 
 class CTMetalDataset(Dataset):
@@ -14,31 +16,34 @@ class CTMetalDataset(Dataset):
         self.root_dir = root_dir
         self.x0_files = sorted(os.listdir(os.path.join(root_dir, 'x0')))
         self.mask_files = sorted(os.listdir(os.path.join(root_dir, 'mask')))
-        self.xT_files = sorted(os.listdir(os.path.join(root_dir, 'xT')))
-        self.xLI_files = sorted(os.listdir(os.path.join(root_dir, 'xLI')))
-
         self.to_tensor = transforms.ToTensor()
 
     def __len__(self):
-        return len(self.x0_files)  # ✅ 按x0数量为主
+        return len(self.x0_files)  
 
     def __getitem__(self, idx):
-        x0_path = os.path.join(self.root_dir, 'x0', self.x0_files[idx])
-        xT_path = os.path.join(self.root_dir, 'xT', self.xT_files[idx])
-        xLI_path = os.path.join(self.root_dir, 'xLI', self.xLI_files[idx])
+        # 当前样本的文件名
+        fname = self.x0_files[idx]
 
-        # ✅ 随机选一张 mask
-        mask_file = random.choice(self.mask_files)
-        mask_path = os.path.join(self.root_dir, 'mask', mask_file)
+        # 路径拼接（要求 x0/xT/xLI 同名）
+        x0_path = os.path.join(self.root_dir, 'x0', fname)
+        xT_path = os.path.join(self.root_dir, 'xT', fname)
+        xLI_path = os.path.join(self.root_dir, 'xLI', fname)
 
-        x0 = load_gray(x0_path)
-        xT = load_gray(xT_path)
-        xLI = load_gray(xLI_path)
-        mask = load_gray(mask_path)
+       
+        mask_fname = random.choice(self.mask_files)
+        mask_path = os.path.join(self.root_dir, 'mask', mask_fname)
+
+        # 读取图像（转换为 tensor）
+        x0 = self.to_tensor(load_gray(x0_path))
+        xT = self.to_tensor(load_gray(xT_path))
+        xLI = self.to_tensor(load_gray(xLI_path))
+        mask = self.to_tensor(load_gray(mask_path))
 
         return {
-            'x0': self.to_tensor(x0),
-            'xT': self.to_tensor(xT),
-            'xLI': self.to_tensor(xLI),
-            'mask': self.to_tensor(mask)
+            'x0': x0,
+            'xT': xT,
+            'xLI': xLI,
+            'mask': mask
         }
+
