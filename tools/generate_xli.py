@@ -5,9 +5,6 @@ import numpy as np
 from tqdm import tqdm
 
 def linear_interpolate(xT, mask):
-    """
-    使用 mask 对应的金属区域进行线性插值修复
-    """
     xLI = xT.copy()
     H, W = xT.shape
 
@@ -39,37 +36,40 @@ def linear_interpolate(xT, mask):
 
 def main(xT_dir, mask_dir, out_dir):
     os.makedirs(out_dir, exist_ok=True)
-    xT_files = sorted(os.listdir(xT_dir))
-    mask_files = sorted(os.listdir(mask_dir))
+    xT_files = sorted([f for f in os.listdir(xT_dir) if f.lower().endswith('.png')])
+    mask_files = sorted([f for f in os.listdir(mask_dir) if f.lower().endswith('.png')])
 
-    for fname in tqdm(xT_files):
-        # 随机从 mask 文件夹选择一个图像
+    print(f"🔎 Found {len(xT_files)} xT images, {len(mask_files)} mask images")
+
+    for fname in tqdm(xT_files, desc="Generating xLI"):
         mask_fname = random.choice(mask_files)
 
-        # 构建路径
         xT_path = os.path.join(xT_dir, fname)
         mask_path = os.path.join(mask_dir, mask_fname)
 
-        # 读取图像
         xT = cv2.imread(xT_path, cv2.IMREAD_GRAYSCALE)
         mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
         if xT is None:
-            print(f"[ERROR] Failed to read xT image: {xT_path}")
+            print(f"[ERROR] ❌ Failed to read xT image: {xT_path}")
             continue
         if mask is None:
-            print(f"[ERROR] Failed to read mask image: {mask_path}")
+            print(f"[ERROR] ❌ Failed to read mask image: {mask_path}")
             continue
 
         xT = xT.astype(np.float32) / 255.0
         mask = (mask > 127).astype(np.uint8)
 
-        # 合成线性插值图像
         xLI = linear_interpolate(xT, mask)
         xLI_uint8 = (xLI * 255).astype(np.uint8)
 
-        # 保存生成图像
-        cv2.imwrite(os.path.join(out_dir, fname), xLI_uint8)
+        out_path = os.path.join(out_dir, fname)
+        cv2.imwrite(out_path, xLI_uint8)
+        print(f"[✔] Saved xLI image: {out_path}")
+
+if __name__ == '__main__':
+    main('data/train/xT', 'data/train/mask', 'data/train/xLI')
+
 
 
 
