@@ -65,9 +65,5 @@ def main(xT_dir, mask_dir, out_dir):
         # 保存生成的 xLI 图像
         cv2.imwrite(os.path.join(out_dir, fname), xLI_uint8)
 
-if __name__ == '__main__':
-    xT_dir = 'data/train/xT'  # `xT` 文件夹路径
-    mask_dir = 'data/train/mask'  # `mask` 文件夹路径
-    out_dir = 'data/train/xLI'  # 输出的 `xLI` 文件夹路径
-    main(xT_dir, mask_dir, out_dir)
+
 
