@@ -40,8 +40,4 @@ def main(x0_dir, mask_dir, out_dir):
         # 保存生成的 xT 图像
         cv2.imwrite(os.path.join(out_dir, fname), xT_uint8)
 
-if __name__ == '__main__':
-    x0_dir = 'data/train/x0'  # `x0` 文件夹路径
-    mask_dir = 'data/train/mask'  # `mask` 文件夹路径
-    out_dir = 'data/train/xT'  # 输出的 `xT` 文件夹路径
-    main(x0_dir, mask_dir, out_dir)
+
