@@ -48,7 +48,12 @@ def main(xT_dir, mask_dir, out_dir):
         xLI_uint8 = (xLI * 255).astype(np.uint8)
 
         cv2.imwrite(os.path.join(out_dir, fname), xLI_uint8)
-
+        if __name__ == '__main__':
+            import sys
+            if len(sys.argv) == 4:
+                main(sys.argv[1], sys.argv[2], sys.argv[3])
+            else:
+                print(\"Usage: python generate_xli.py <xT_dir> <mask_dir> <out_dir>\")
 
 
 
