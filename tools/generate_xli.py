@@ -67,7 +67,6 @@ def main(xT_dir, mask_dir, out_dir):
         cv2.imwrite(out_path, xLI_uint8)
         print(f"[✔] Saved xLI image: {out_path}")
 
-if __name__ == '__main__':
 
 
 
