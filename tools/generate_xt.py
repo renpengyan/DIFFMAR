@@ -36,7 +36,7 @@ def main(x0_dir, mask_dir, out_dir):
             if len(sys.argv) == 4:
                 main(sys.argv[1], sys.argv[2], sys.argv[3])
             else:
-                print(\"Usage: python generate_xt.py <x0_dir> <mask_dir> <out_dir>\")
+                print("Usage: python generate_xt.py <x0_dir> <mask_dir> <out_dir>")
 
 
       
