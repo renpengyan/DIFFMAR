@@ -42,7 +42,7 @@ def main(x0_dir, mask_dir, out_dir):
         cv2.imwrite(out_path, xT_uint8)
         print(f"[✔] Saved xT image: {out_path}")
 
-if __name__ == '__main__':
+
     
 
       
