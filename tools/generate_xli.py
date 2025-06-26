@@ -53,7 +53,7 @@ def main(xT_dir, mask_dir, out_dir):
             if len(sys.argv) == 4:
                 main(sys.argv[1], sys.argv[2], sys.argv[3])
             else:
-                print(\"Usage: python generate_xli.py <xT_dir> <mask_dir> <out_dir>\")
+                print("Usage: python generate_xli.py <xT_dir> <mask_dir> <out_dir>")
 
 
 
